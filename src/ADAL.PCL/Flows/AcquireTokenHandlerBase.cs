@@ -248,19 +248,21 @@ namespace Microsoft.IdentityModel.Clients.ActiveDirectory
 
         protected virtual async Task<AuthenticationResultEx> SendTokenRequestAsync()
         {
-            var requestParameters = new DictionaryRequestParameters(this.Resource, this.ClientKey);
+            var requestParameters = new DictionaryRequestParameters(ClientKey, Resource);
             this.AddAditionalRequestParameters(requestParameters);
             return await this.SendHttpMessageAsync(requestParameters).ConfigureAwait(false);
         }
 
         protected async Task<AuthenticationResultEx> SendTokenRequestByRefreshTokenAsync(string refreshToken)
         {
-            var requestParameters = new DictionaryRequestParameters(this.Resource, this.ClientKey);
-            requestParameters[OAuthParameter.GrantType] = OAuthGrantType.RefreshToken;
-            requestParameters[OAuthParameter.RefreshToken] = refreshToken;
-            requestParameters[OAuthParameter.Scope] = OAuthValue.ScopeOpenId;
+            var requestParameters = new DictionaryRequestParameters(ClientKey)
+            {
+                [OAuthParameter.GrantType] = OAuthGrantType.RefreshToken,
+                [OAuthParameter.RefreshToken] = refreshToken,
+                [OAuthParameter.Scope] = $"{OAuthValue.ScopeOpenId} {Resource}"
+            };
 
-            AuthenticationResultEx result = await this.SendHttpMessageAsync(requestParameters).ConfigureAwait(false);
+            var result = await this.SendHttpMessageAsync(requestParameters).ConfigureAwait(false);
 
             if (result.RefreshToken == null)
             {

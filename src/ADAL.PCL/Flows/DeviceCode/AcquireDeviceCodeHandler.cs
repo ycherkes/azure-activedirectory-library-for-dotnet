@@ -51,7 +51,7 @@ namespace Microsoft.IdentityModel.Clients.ActiveDirectory
         
         private string CreateDeviceCodeRequestUriString()
         {
-            var deviceCodeRequestParameters = new DictionaryRequestParameters(this.resource, this.clientKey);
+            var deviceCodeRequestParameters = new DictionaryRequestParameters(this.clientKey);
 
             if (this.callState != null && this.callState.CorrelationId != Guid.Empty)
             {

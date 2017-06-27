@@ -13,6 +13,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <DebugType>full</DebugType>
+    <DelaySign>False</DelaySign>
+    <SignAssembly>False</SignAssembly>
   </PropertyGroup>
 
   <!-- Import common settings -->

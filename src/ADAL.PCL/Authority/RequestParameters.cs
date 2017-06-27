@@ -36,28 +36,29 @@ namespace Microsoft.IdentityModel.Clients.ActiveDirectory
 
     internal class DictionaryRequestParameters : Dictionary<string, string>, IRequestParameters
     {
-        public DictionaryRequestParameters(string resource, ClientKey clientKey)
+        public DictionaryRequestParameters(ClientKey clientKey, string scope = null)
         {
-            if (!string.IsNullOrWhiteSpace(resource))
+            if (!string.IsNullOrWhiteSpace(scope))
             {
-                this[OAuthParameter.Resource] = resource;
+                this[OAuthParameter.Scope] = scope;
             }
+
 
             clientKey.AddToParameters(this);    
         }
 
         public override string ToString()
         {
-            StringBuilder messageBuilder = new StringBuilder();
+            var messageBuilder = new StringBuilder();
 
-            foreach (KeyValuePair<string, string> kvp in this)
+            foreach (var kvp in this)
             {
                 EncodingHelper.AddKeyValueString(messageBuilder, EncodingHelper.UrlEncode(kvp.Key), EncodingHelper.UrlEncode(kvp.Value));
             }
 
             if (this.ExtraQueryParameter != null)
             {
-                messageBuilder.Append('&' + this.ExtraQueryParameter);
+                messageBuilder.Append('&' + ExtraQueryParameter);
             }
 
             return messageBuilder.ToString();

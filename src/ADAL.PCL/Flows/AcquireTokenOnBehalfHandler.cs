@@ -71,7 +71,10 @@ namespace Microsoft.IdentityModel.Clients.ActiveDirectory
             requestParameters[OAuthParameter.RequestedTokenUse] = OAuthRequestedTokenUse.OnBehalfOf;
 
             // To request id_token in response
-            requestParameters[OAuthParameter.Scope] = OAuthValue.ScopeOpenId;
+
+            requestParameters[OAuthParameter.Scope] = requestParameters.ContainsKey(OAuthParameter.Scope)
+                ? $"{requestParameters[OAuthParameter.Scope]} {OAuthValue.ScopeOpenId}"
+                : OAuthValue.ScopeOpenId;
         }
     }
 }
